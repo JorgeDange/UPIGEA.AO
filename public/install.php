@@ -3,7 +3,7 @@
  * UPIGEA.AO — Instalação pós-upload (servidores sem terminal)
  *
  * UMA ÚNICA VEZ: faça upload deste ficheiro para public/, visite
- * https://docs.../install.php?token=TROQUE-ESTE-TOKEN
+ * https://SEU-DOMINIO/install.php?token=SEU-TOKEN
  * e ELIMINE o ficheiro do servidor no fim.
  */
 
@@ -39,11 +39,16 @@ run('view:cache');
 
 // 2. Recriar a ligação public/storage -> raiz do disco de ficheiros
 $link = __DIR__ . '/storage';
-if (file_exists($link) || is_link($link)) {
-    echo "a remover ligação antiga public/storage\n";
-    @unlink($link);
+if (is_link($link)) {
+    echo "ligação antiga -> " . readlink($link) . "\n";
+    @unlink($link) || @rmdir($link);
+} elseif (file_exists($link) && is_dir($link)) {
+    echo "AVISO: public/storage é uma pasta real, não uma ligação\n";
 }
 run('storage:link');
+echo is_link($link)
+    ? "nova ligação public/storage -> " . readlink($link) . "\n"
+    : "public/storage -> NÃO CRIADO (verificar)\n";
 
 // 3. Permissões de escrita nas pastas de dados
 $targets = [
@@ -64,8 +69,9 @@ echo "\n" . str_repeat('-', 50) . "\n";
 echo 'APP_URL:     ' . config('app.url') . "\n";
 echo 'FILES_BASE_URL: ' . config('files.base_url') . "\n";
 echo 'FILES_BASE_PATH: ' . config('files.base_path') . "\n";
+echo 'Raiz do disco:  ' . config('filesystems.disks.public.root') . "\n";
 echo 'DB:          ' . DB::connection()->getDriverName() . ' @ ' . DB::connection()->getDatabaseName() . "\n";
 echo 'Categorias:  ' . App\Models\Category::count() . " | Contas: " . App\Models\User::count() . "\n";
-echo "\nSe FILES_BASE_URL contiver \${...}, corrija o .env:\n";
-echo 'FILES_BASE_URL=https://docs.pigea.ao   (sem \${} e sem aspas)\n';
-echo "\nELIMINE install.php do servidor quando terminar.\n";
+
+echo "\nConfira que a Raiz do disco é a pasta do subdomínio (FILES_ROOT no .env).\n";
+echo "ELIMINE install.php do servidor quando terminar.\n";

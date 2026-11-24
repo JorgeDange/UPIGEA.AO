@@ -124,14 +124,6 @@ php artisan serve
 6. **Limites PHP:** `upload_max_filesize` e `post_max_size` ≥ 12M no `php.ini`.
 7. **Subdomínio de armazenamento:** apontar `files.seudominio.com` para `storage/app/public` (symlink ou DocumentRoot próprio).
 
-**Contas iniciais (mudar as passwords após o primeiro acesso):**
-
-| Papel | E-mail | Palavra-passe |
-|-------|--------|----------------|
-| Admin | `admin@pigea.com` | `admin123` |
-| User  | `user@pigea.com` | `user123` |
-
-> ⚠️ Se a base de dados antiga tinha hashes corrompidos, reexecute `php artisan db:seed --force` para repor as passwords.
 
 ---
 

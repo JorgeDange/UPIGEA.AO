@@ -40,7 +40,11 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            // FILES_ROOT: raiz física do disco de ficheiros. Por omissão é a pasta
+            // padrão do Laravel; em produção pode apontar diretamente para a pasta
+            // do subdomínio (ex.: /home/USER/docs.dominio.ao) para os uploads
+            // nascerem já no sítio público.
+            'root' => env('FILES_ROOT', storage_path('app/public')),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,

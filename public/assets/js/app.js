@@ -225,7 +225,8 @@
           }
           setTimeout(function () { window.location.reload(); }, 1600);
         } else {
-          var errorText = 'Falha no upload. Tente novamente.';
+          console.error('[UPIGEA] resposta do upload:', xhr.status, xhr.responseText);
+          var errorText = 'Falha no upload (HTTP ' + xhr.status + '). Tente novamente.';
           var firstError = res.errors && (res.errors.file || res.errors.category);
           if (firstError) { errorText = firstError[0]; }
           fill.classList.add('is-error');

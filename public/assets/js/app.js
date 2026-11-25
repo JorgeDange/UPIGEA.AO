@@ -210,7 +210,9 @@
       xhr.addEventListener('load', function () {
         var res = {};
         try { res = JSON.parse(xhr.responseText); } catch (err) { /* noop */ }
-        if (xhr.status === 201) {
+        // Sucesso: qualquer 2xx (alguns servidores respondem 200 em vez de 201)
+        var success = (res && res.upload) && xhr.status >= 200 && xhr.status < 300;
+        if (success) {
           fill.style.width = '100%';
           fill.classList.add('is-done');
           pct.textContent = '100%';
